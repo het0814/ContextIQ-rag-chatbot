@@ -6,7 +6,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from utils.scraper import fetch_url_content
 from utils.parser import parse_pdf, parse_pdf_plumber, parse_docx
-from retrieval.retriever import add_document, retrieve_context
+from retrieval.retriever import add_document, generate_response
 
 def test_scraper():
     url = "https://www.bbc.com/news"
@@ -31,21 +31,29 @@ def test_parser():
     assert len(docx_text) > 0, "DOCX content is empty"
     print("DOCX Parser Test passed!")
 
-def test_retriever():
-    # Add test document to the retriever
+def test_generate_response():
     sample_text = "OpenAI develops powerful language models like GPT-4."
     add_document(sample_text, {"source": "test"})
 
-    # Test retrieval
+    # Test single query
     query = "Who develops GPT-4?"
-    context = retrieve_context(query)
-    
-    assert context is not None, "Failed to retrieve context"
-    assert len(context) > 0, "Retrieved context is empty"
-    assert any("OpenAI" in result for result in context), "Expected content not found in retrieved context"
-    print("Retriever Test passed!")
+    response = generate_response(query)
+    assert response is not None, "Failed to generate response"
+    assert len(response) > 0, "Generated response is empty"
+    assert "OpenAI" in response, "Response doesn't contain expected content"
+    print("Single Query Test passed!")
+
+    # Test follow-up query to check context retention
+    follow_up_query = "What other models have they created?"
+    follow_up_response = generate_response(follow_up_query)
+    print(follow_up_response)
+    assert follow_up_response is not None, "Failed to generate follow-up response"
+    assert len(follow_up_response) > 0, "Generated follow-up response is empty"
+    assert "GPT" in follow_up_response, "Expected context not found in follow-up response"
+    print("Follow-Up Query Test passed!")
+
 
 if __name__ == "__main__":
     test_scraper()
     test_parser()
-    test_retriever()
+    test_generate_response()
