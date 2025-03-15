@@ -1,33 +1,17 @@
-from playwright.sync_api import sync_playwright
-from bs4 import BeautifulSoup
+from langchain_community.document_loaders import WebBaseLoader
+from langchain.schema import Document
 
 def fetch_url_content(url):
     try:
-        with sync_playwright() as p:
-            # Launch the browser
-            browser = p.chromium.launch(headless=True)  # Set headless=False to see the browser in action
-            page = browser.new_page()
+        loader = WebBaseLoader(url)  # Initialize the WebBaseLoader with the URL
+        documents = loader.load()  # Load documents from the URL
 
-            # Navigate to the page
-            page.goto(url)
-
-            # Wait for content to load (optional: adjust based on page structure)
-            page.wait_for_selector('body')
-
-            # Get the page content after rendering JavaScript
-            html = page.content()
-
-            # Use BeautifulSoup to parse the page
-            soup = BeautifulSoup(html, 'html.parser')
-
-            # Extract text from <p> and <div> tags
-            paragraphs = soup.find_all(['p', 'div'])
-            text = ' '.join([para.get_text() for para in paragraphs])
-
-            browser.close()
-
+        if documents:
+            text = " ".join([doc.page_content for doc in documents])
             return text.strip()
-
+        else:
+            print("No content fetched from the URL.")
+            return None
     except Exception as e:
-        print(f"Error fetching URL: {e}")
+        print(f"Error fetching URL content: {e}")
         return None
