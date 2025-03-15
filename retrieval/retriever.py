@@ -40,11 +40,14 @@ def add_document(text, metadata=None):
         vector_store.add_documents([doc])
         vector_store.persist()
         print("Document added to vector store.")
+        print(f"Document added: {text[:100]}...") # for testing
     except Exception as e:
         print(f"Error adding document: {e}")
 
 def generate_response(query):
     try:
+        context = retriever.get_relevant_documents(query) 
+        print(f"Retrieved context: {[doc.page_content[:100] for doc in context]}") # for testing
         response = qa_chain.invoke({"question": query})
         return response['answer']
     except Exception as e:
