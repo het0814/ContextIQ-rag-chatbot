@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from utils.scraper import fetch_url_content
 from utils.parser import parse_pdf, parse_pdf_plumber, parse_docx
-from retrieval.retriever import add_document, generate_response
+from retrieval.retriever import add_document, generate_response, context_sources
 import os
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -75,4 +75,11 @@ def generate_response_endpoint(request: ResponseRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error generating response: {e}")
 
+@app.get("/get-context-sources")
+def get_context_sources():
+    try:
+        sources = context_sources()
+        return {"context_sources": sources}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching context sources: {e}")
 

@@ -53,3 +53,16 @@ def generate_response(query):
     except Exception as e:
         print(f"Error generating response: {e}")
         return "Sorry, I couldn't generate an answer."
+
+def context_sources():
+    try:
+        # Retrieve all context sources from the vector store
+        results = vector_store.get()
+        metadatas = results.get("metadatas", [])
+        context_sources = [
+            {"source": metadata.get("source", "Unnamed document")}
+            for metadata in metadatas
+        ]
+        return context_sources
+    except Exception as e:
+        print(f"Error getting context sources: {e}")
