@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function FileUpload() {
+function FileUpload({ onUploadSuccess }) {
   const [url, setUrl] = useState("");
   const [file, setFile] = useState(null);
 
@@ -11,6 +11,7 @@ function FileUpload() {
       await axios.post('http://localhost:8000/add-url', { url });
       alert("URL content added successfully.");
       setUrl("");
+      onUploadSuccess();
     } catch (error) {
       console.error(error);
       alert("Error adding URL.");
@@ -30,6 +31,7 @@ function FileUpload() {
       });
       alert("File uploaded successfully.");
       setFile(null);
+      onUploadSuccess();
     } catch (error) {
       console.error(error);
       alert("Error uploading file.");
@@ -39,6 +41,8 @@ function FileUpload() {
   return (
     <div>
       <h2>Upload File / URL</h2>
+
+      {/* URL Input */}
       <div>
         <form onSubmit={handleUrlSubmit}>
           <input
@@ -51,6 +55,8 @@ function FileUpload() {
           <button type="submit">Add URL</button>
         </form>
       </div>
+
+      {/* File Input */}
       <div>
         <form onSubmit={handleFileUpload}>
           <input 
