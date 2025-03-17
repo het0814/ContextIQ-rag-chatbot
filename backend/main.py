@@ -5,8 +5,17 @@ from utils.scraper import fetch_url_content
 from utils.parser import parse_pdf, parse_pdf_plumber, parse_docx
 from retrieval.retriever import add_document, generate_response
 import os
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins="http://localhost:3000",  # allows request only from frontend (React app)
+    allow_credentials=True,
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"]
+)
 
 class URLRequest(BaseModel):
     url: str
