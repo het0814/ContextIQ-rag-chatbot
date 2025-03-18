@@ -4,6 +4,7 @@ from langchain.schema import Document
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
+from langchain.prompts import PromptTemplate
 import os
 
 # Load OpenAI API Key from environment variable
@@ -28,10 +29,35 @@ memory = ConversationBufferMemory(
 # Create the conversational chain using retriever + memory
 retriever = vector_store.as_retriever(search_kwargs={"k": 3})
 
+# Custom Prompt Template
+prompt_template = PromptTemplate(
+    input_variables=["chat_history", "context", "question"],
+    template="""
+    You are a helpful and knowledgeable AI assistant.
+
+    Use the following context and previous conversation to answer the user's question:
+
+    Previous conversation:
+    {chat_history}
+
+    Context:
+    {context}
+
+    - If the context doesn’t provide enough information, say you don’t know instead of guessing.  
+    - Keep answers clear, concise, and directly relevant to the question.  
+    - When helpful, use bullet points or lists to improve clarity.  
+
+    Question: {question}
+
+    Answer:
+    """
+)
+
 qa_chain = ConversationalRetrievalChain.from_llm(
     llm=llm,
     retriever=retriever,
-    memory=memory
+    memory=memory,
+    combine_docs_chain_kwargs={"prompt": prompt_template}
 )
 
 def add_document(text, metadata=None):
