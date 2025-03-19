@@ -6,6 +6,7 @@ import FileUpload from './components/FileUpload';
 function App() {
   const [response, setResponse] = useState("");
   const [contextSources, setContextSources] = useState([]);
+
   const fetchContextSources = async () => {
     try {
       const res = await axios.get('http://localhost:8000/get-context-sources');
@@ -30,18 +31,18 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <h1>ContextIQ - RAG Chatbot</h1>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+    <div className="app">
+      <h1 className="header">ContextIQ - RAG Chatbot</h1>
+      <div className="container">
         {/* Chat Window */}
-        <div style={{ flex: 1 }}>
+        <div className="chat-window">
           <ChatComponent onSubmitQuery={handleQuerySubmit} response={response} />
         </div>
 
         {/* Upload + Context Sources */}
-        <div style={{ flex: 1, marginLeft: "20px" }}>
+        <div className="sidebar">
           <FileUpload onUploadSuccess={fetchContextSources} />
-          <div style={{ marginTop: "20px" }}>
+          <div className="context-list">
             <h3>Added Context Sources</h3>
             <ul>
               {contextSources.length > 0 ? (
