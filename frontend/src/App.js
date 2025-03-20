@@ -41,15 +41,13 @@ function App() {
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-6">
       <Toaster />
       <h1 className="text-3xl font-bold text-blue-600 mb-6">ContextIQ - RAG Chatbot</h1>
+      
+      {/* Layout Wrapper */}
       <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-6 px-4">
         
-        {/* Chat Section */}
-        <div className="flex-1 bg-white shadow-lg rounded-lg p-6">
-          <ChatComponent onSubmitQuery={handleQuerySubmit} response={response} />
-        </div>
-
         {/* Upload Section */}
         <div className="w-full lg:w-1/3 bg-white shadow-lg rounded-lg p-6">
+          <h2 className="text-lg font-semibold mb-4 text-gray-700">📂 Manage Context Sources</h2>
           <FileUpload onUploadSuccess={fetchContextSources} />
           <div className="mt-4">
             <h3 className="text-lg font-semibold">Added Context Sources</h3>
@@ -63,6 +61,11 @@ function App() {
               )}
             </ul>
           </div>
+        </div>
+
+        {/* Chat Section */}
+        <div className="flex-1 bg-white shadow-lg rounded-lg p-6">
+          <ChatComponent onSubmitQuery={handleQuerySubmit} response={response} />
         </div>
 
       </div>
