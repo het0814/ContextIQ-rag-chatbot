@@ -13,7 +13,7 @@ const ChatComponent = ({ onSubmitQuery, response }) => {
       setIsTyping(true);
       setCurrentTyping("");
 
-      let index = 0;
+      let index = -1;
       const typingInterval = setInterval(() => {
         if (index < response.length) {
           setCurrentTyping((prev) => prev + response[index]);
