@@ -40,7 +40,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-6">
       <Toaster />
-      <h1 className="text-3xl font-bold text-blue-600 mb-6">ContextIQ - RAG Chatbot</h1>
+      <h1 className="text-3xl font-bold text-blue-600 mb-6 flex items-center"><img src="/favicon.ico" alt="App Icon" className="w-12 h-12 mr-3" />ContextIQ - RAG Chatbot</h1>
       
       {/* Layout Wrapper */}
       <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-6 px-4">
